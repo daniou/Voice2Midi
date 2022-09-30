@@ -2,7 +2,7 @@ import librosa
 import audiomentations as am 
 import pandas as pd
 import numpy as np
-import tensorboard as tf
+import tensorflow as tf
 
 #Global Variables
 SAMPLES = 500 #Number of modified audios per trigger
@@ -81,9 +81,13 @@ def loadNoTriggerFeatures(path):
 def generateDataset(triggers):
     dataset = pd.DataFrame()
     dataset = dataset.append(extractFeatures(triggers))
-    dataset = dataset.append(loadNoTriggerFeatures("no_trigger_features.csv"))
+    dataset.to_csv("dataseta.csv")
+
+    dataset = dataset.append(loadNoTriggerFeatures(CSVS+"no_trigger_features.csv"))
     features = dataset.iloc[: , 2:]
     target = dataset.iloc[: , 1:2]
+    dataset.to_csv("dataset.csv")
+    features.to_csv("features.csv")
     return features,target
     
 #Create AI Model
