@@ -83,10 +83,37 @@ def generateDataset(triggers):
     target = dataset.iloc[: , 1:2]
     return features,target
     
+#Create AI Model
+def createModel(features,target):
+    #print("RUNNING createModel")
+    tf.convert_to_tensor(features) #import data as tensor
+    tf.convert_to_tensor(target)
+    normalizer = tf.keras.layers.Normalization(axis=-1)
+    normalizer.adapt(features)
 
+    #Create model
+    model = tf.keras.Sequential([
+        normalizer,
+        tf.keras.layers.Dense(10, activation='relu'),
+        tf.keras.layers.Dense(10, activation='relu'),
+        tf.keras.layers.Dense(1)
+    ])
+
+    model.compile(optimizer='adam', loss=tf.keras.losses.BinaryCrossentropy(from_logits=True), metrics=['accuracy'])
+    #Train Model
+    model.fit(features, target, epochs=ITERACIONES)
+    
+    #Add Last layer to normalize the output
+    export_model = tf.keras.Sequential([
+    model,
+    layers.Activation('sigmoid')
+    ])
+
+    export_model.compile(loss=losses.BinaryCrossentropy(from_logits=False), optimizer="adam", metrics=['accuracy'])
+    return export_model
 
 #MAIN
 triggers    = recordTriggers()
 modulated_triggers = generateModulations(triggers)
 features, target   = generateDataset(modulated_triggers)
-print(target)
+createModel(features,target)
