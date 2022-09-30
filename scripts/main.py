@@ -2,15 +2,18 @@ import librosa
 import audiomentations as am 
 import pandas as pd
 import numpy as np
+import tensorboard as tf
 
 #Global Variables
 SAMPLES = 500 #Number of modified audios per trigger
 SR      = 5000 #Sample Rate
+ITERACIONES = 10 #Iteraciones que hace la IA
+
 
 FILES_PATH = ".././Audios/pums/"
 CROPPED_AUDIOS_PATH = ".././Cropped_Audios/"
-CROPPED_NO_PUMS = CROPPED_AUDIOS_PATH+"../no_pums/"
-CROPPED_PUMS = CROPPED_AUDIOS_PATH+"../pums/"
+CROPPED_NO_PUMS = "../"+CROPPED_AUDIOS_PATH+"no_pums/"
+CROPPED_PUMS = "../"+CROPPED_AUDIOS_PATH+"pums/"
 
 #Record Triggers
 def recordTriggers():
@@ -106,10 +109,10 @@ def createModel(features,target):
     #Add Last layer to normalize the output
     export_model = tf.keras.Sequential([
     model,
-    layers.Activation('sigmoid')
+    tf.keras.layers.Activation('sigmoid')
     ])
 
-    export_model.compile(loss=losses.BinaryCrossentropy(from_logits=False), optimizer="adam", metrics=['accuracy'])
+    export_model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=False), optimizer="adam", metrics=['accuracy'])
     return export_model
 
 #MAIN
