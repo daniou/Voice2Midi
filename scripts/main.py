@@ -69,32 +69,37 @@ def extractFeatures(sounds):
         for i in range(len(mfccs_scaled)):
             mfccs_header.append("Mfcc"+str(i))
 
-        dataset=dataset.append([1,np.mean(chroma),np.mean(spectralCentroid),np.mean(spectralBandwidth),np.mean(spectralRolloff),np.mean(spectralRolloff_min),np.mean(spectralZeroCrossing)]+mfccs_scaled)
+        dataset=dataset.append([[1,np.mean(chroma),np.mean(spectralCentroid),np.mean(spectralBandwidth),np.mean(spectralRolloff),np.mean(spectralRolloff_min),np.mean(spectralZeroCrossing)]+mfccs_scaled])
     return dataset
 
 #Load CSV file with non-trigger features
 def loadNoTriggerFeatures(path):
-    return pd.read_csv(path)
+    df = pd.read_csv(path, header=None,index_col=False)
+    df = df.drop([0], axis=1)
+    df = df.drop([0], axis=0)
+    df.columns = range(df.columns.size)
+    return df
 
 
 #Generate Dataset
 def generateDataset(triggers):
-    dataset = pd.DataFrame()
-    dataset = dataset.append(extractFeatures(triggers))
-    dataset.to_csv("dataseta.csv")
-
-    dataset = dataset.append(loadNoTriggerFeatures(CSVS+"no_trigger_features.csv"))
-    features = dataset.iloc[: , 2:]
-    target = dataset.iloc[: , 1:2]
-    dataset.to_csv("dataset.csv")
-    features.to_csv("features.csv")
+    t = extractFeatures(triggers)
+    nt = loadNoTriggerFeatures(CSVS+"no_trigger_features.csv")
+    # dataset = pd.concat([tf,ntf], ignore_index=True)
+    dataset = t.append(nt,ignore_index=True)
+    features = dataset.iloc[: , 1:]
+    target = dataset.iloc[: , 0:1]
     return features,target
     
 #Create AI Model
 def createModel(features,target):
     #print("RUNNING createModel")
-    tf.convert_to_tensor(features) #import data as tensor
-    tf.convert_to_tensor(target)
+    print(type(features)," ",type(target))
+    # features.to_csv("f.csv")
+    # target.to_csv("t.csv")
+    print(features)
+    tf.convert_to_tensor(np.array(features), dtype=tf.float32) #import data as tensor
+    tf.convert_to_tensor(np.array(target), dtype=tf.float32)
     normalizer = tf.keras.layers.Normalization(axis=-1)
     normalizer.adapt(features)
 
