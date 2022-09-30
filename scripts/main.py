@@ -18,7 +18,7 @@ def recordTriggers():
     #print(data)
     return [data]
 
-#Audio Augmentations
+#Audio Augmentations POLLA
 augment_raw_audio = am.Compose(
     [
         am.AddGaussianNoise(min_amplitude=0.001, max_amplitude=0.015, p=0.8),
