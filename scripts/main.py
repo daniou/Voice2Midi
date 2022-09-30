@@ -30,7 +30,7 @@ augment_raw_audio = am.Compose(
     ]
 )
 
-#Generate Modulations
+#Generate Modulation
 def generateModulations(sounds):
     modulations = []
     for sound in sounds:
