@@ -14,7 +14,7 @@ FILES_PATH = "../Audios/pums/"
 CROPPED_AUDIOS_PATH = "../Cropped_Audios/"
 CROPPED_NO_PUMS = CROPPED_AUDIOS_PATH+"no_pums/"
 CROPPED_PUMS = CROPPED_AUDIOS_PATH+"pums/"
-
+CSVS = "../csvs/"
 #Record Triggers
 def recordTriggers():
     data, _ = librosa.load(FILES_PATH+"1.wav",sr=SR,duration=1)
