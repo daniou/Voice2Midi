@@ -7,10 +7,10 @@ import numpy as np
 SAMPLES = 500 #Number of modified audios per trigger
 SR      = 5000 #Sample Rate
 
-FILES_PATH = "./Audios/pums/"
-CROPPED_AUDIOS_PATH = "./Cropped_Audios/"
-CROPPED_NO_PUMS = CROPPED_AUDIOS_PATH+"no_pums/"
-CROPPED_PUMS = CROPPED_AUDIOS_PATH+"pums/"
+FILES_PATH = ".././Audios/pums/"
+CROPPED_AUDIOS_PATH = ".././Cropped_Audios/"
+CROPPED_NO_PUMS = CROPPED_AUDIOS_PATH+"../no_pums/"
+CROPPED_PUMS = CROPPED_AUDIOS_PATH+"../pums/"
 
 #Record Triggers
 def recordTriggers():
