@@ -10,10 +10,10 @@ SR      = 5000 #Sample Rate
 ITERACIONES = 10 #Iteraciones que hace la IA
 
 
-FILES_PATH = ".././Audios/pums/"
-CROPPED_AUDIOS_PATH = ".././Cropped_Audios/"
-CROPPED_NO_PUMS = "../"+CROPPED_AUDIOS_PATH+"no_pums/"
-CROPPED_PUMS = "../"+CROPPED_AUDIOS_PATH+"pums/"
+FILES_PATH = "../Audios/pums/"
+CROPPED_AUDIOS_PATH = "../Cropped_Audios/"
+CROPPED_NO_PUMS = CROPPED_AUDIOS_PATH+"no_pums/"
+CROPPED_PUMS = CROPPED_AUDIOS_PATH+"pums/"
 
 #Record Triggers
 def recordTriggers():
