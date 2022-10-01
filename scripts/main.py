@@ -129,10 +129,26 @@ def createModel(features,target):
     export_model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=False), optimizer="adam", metrics=['accuracy'])
     return export_model
 
+def extractData(sound):
+    data = extractFeatures(sound)
+    features = data.iloc[: , 1:]
+    features = np.array(features).astype(np.float32)
+    return features
+
+def isPum(sound,model):
+    soundFeatures = extractData(sound)
+    result = model.predict(soundFeatures)
+    if(result > 0.5):
+        return True
+    else:
+        return False
+    
+
 #MAIN
 triggers           = recordTriggers()
 modulated_triggers = generateModulations(triggers)
 features, target   = generateDataset(modulated_triggers)
 model              = createModel(features,target)
 
-#Eso es con el training, no con el validation
+Sound, _ =librosa.load("./testaudios/1_0.wav",sr=SR,duration=1)
+print(isPum([Sound],model))
