@@ -1,0 +1,5 @@
+audiomentations==0.25.1
+librosa==0.9.1
+numpy==1.22.4
+pandas==1.4.4
+tensorflow==2.10.0
