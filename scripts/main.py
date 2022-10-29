@@ -3,6 +3,8 @@ import audiomentations as am
 import pandas as pd
 import numpy as np
 import tensorflow as tf
+
+from audio_parser import split_audio
 #commentario prueba
 #Global Variables
 SAMPLES     = 500 #Number of modified audios per trigger
@@ -150,5 +152,6 @@ modulated_triggers = generateModulations(triggers)
 features, target   = generateDataset(modulated_triggers)
 model              = createModel(features,target)
 
-Sound, _ =librosa.load("./testaudios/1_0.wav",sr=SR,duration=1)
-print(isPum([Sound],model))
+chunks = split_audio("Audios\no_pums\TERROR EN DISCOTECAS EUROPEAS POR UNA OLEADA DE CHICAS PINCHADAS CON JERINGUILLAS DURANTE LA FIESTA.wav")
+for chunk in chunks:
+    print(isPum([chunk],model))
