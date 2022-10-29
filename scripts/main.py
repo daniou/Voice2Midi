@@ -152,6 +152,6 @@ modulated_triggers = generateModulations(triggers)
 features, target   = generateDataset(modulated_triggers)
 model              = createModel(features,target)
 
-chunks = split_audio("Audios\no_pums\TERROR EN DISCOTECAS EUROPEAS POR UNA OLEADA DE CHICAS PINCHADAS CON JERINGUILLAS DURANTE LA FIESTA.wav")
+chunks = split_audio("../Audios/no_pums/TERROR EN DISCOTECAS EUROPEAS POR UNA OLEADA DE CHICAS PINCHADAS CON JERINGUILLAS DURANTE LA FIESTA.wav")
 for chunk in chunks:
-    print(isPum([chunk],model))
+    print("El chunk es trigger: ",isPum([chunk],model))
