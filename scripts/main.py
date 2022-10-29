@@ -3,7 +3,7 @@ import audiomentations as am
 import pandas as pd
 import numpy as np
 import tensorflow as tf
-
+#commentario prueba
 #Global Variables
 SAMPLES     = 500 #Number of modified audios per trigger
 SR          = 5000 #Sample Rate
