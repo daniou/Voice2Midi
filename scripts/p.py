@@ -1,19 +1,18 @@
 import librosa
 import numpy as np
-from scipy.fft import fft
-import numpy as np
 from midiutil import MIDIFile
 
 
 class MidiNote:
-    def __init__(self, pitch, start_time, end_time):
-        self.pitch = pitch
+    def __init__(self, frequency, start_time, end_time):
+        self.frequency = frequency
+        self.pitch = frequency_to_midi(frequency)
         self.start_time = start_time
         self.end_time = end_time
         self.velocity = 100
 
     def __str__(self):
-        return f"Nota MIDI: {self.pitch}, Tiempo de inicio: {self.start_time}, Tiempo de finalización: {self.end_time}, Velocidad: {self.velocity}"
+        return f"Nota MIDI: {self.pitch}, Tiempo de inicio: {self.start_time}, Tiempo de finalización: {self.end_time}, FREQUENCY: {self.frequency}"
 
 
 def generate_midi_file(midi_notes, output_file):
@@ -39,26 +38,9 @@ def generate_midi_file(midi_notes, output_file):
     with open(output_file, 'wb') as file:
         midi_file.writeFile(file)
 
-    # def get_dominant_frequency(audio_data, sr):
-    pass
-    # Calcular la Transformada Rápida de Fourier (FFT)
-
-
-#   fft_result = fft(audio_data)
-
-# Obtener las frecuencias y sus magnitudes
-#  frequencies = np.fft.fftfreq(len(fft_result), 1 / sr)
-# magnitudes = np.abs(fft_result)
-
-# Encontrar la frecuencia predominante
-# dominant_frequency = frequencies[np.argmax(np.abs(magnitudes))]
-
-# return dominant_frequency
-
 def get_dominant_frequency(data, sampling_rate):
     fft_data = np.fft.fft(data)
     freqs = np.fft.fftfreq(len(data))
-
     peak_coefficient = np.argmax(np.abs(fft_data))
     peak_freq = freqs[peak_coefficient]
 
@@ -104,15 +86,14 @@ def split_audio(file_path, segment_duration):
         print(start, "adasda", end)
         segment = audio_data[start:end]
 
-        dominant_frequency = get_dominant_frequency(segment, sample_rate)
-        midi_pitch = frequency_to_midi(dominant_frequency)
-        midi_note = MidiNote(midi_pitch, float(start) / sample_rate, float(end) / sample_rate)
+        dominant_frequency = get_dominant_frequency(segment, sample_rate*2)
+
+        midi_note = MidiNote(dominant_frequency, float(start) / sample_rate, float(end) / sample_rate)
         print(f"Nota midi: {midi_note}")
         midi_notes.append(midi_note)
     return midi_notes
 
-
-file_path = "audio.mp3"
+file_path = "audio.wav"
 sample_period = 1.0 / int(input("Introduce los samples por segundo: "))
 print(sample_period)
 midi_notes = split_audio(file_path, sample_period)
