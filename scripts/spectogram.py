@@ -21,6 +21,6 @@ def generate_spectrogram(audio_file, output_file):
 
 
 # Llamar a la función para generar y guardar el espectrograma
-audio_file = "audio.wav"
+audio_file = "tutu.wav"
 output_image_file = "spectrogram.png"
 generate_spectrogram(audio_file, output_image_file)
