@@ -1,6 +1,10 @@
 from midiutil import MIDIFile
 import numpy as np
 
+
+SNAP = True
+CLOSE_TO_NOTE_PERCENTAGE = 0.8
+
 class MidiNote:
     def __init__(self, frequency, start_time, end_time):
         self.frequency = frequency
@@ -27,6 +31,9 @@ def generate_midi_file(midi_notes, output_file):
     with open(output_file, 'wb') as file:
         midi_file.writeFile(file)
 
+def frequency_is_close_to_note(notefreq,freq):
+    return np.abs(notefreq-freq) <= notefreq * (2 ** (1/12*CLOSE_TO_NOTE_PERCENTAGE) - 1) #Checks difference is less than 3/4 of a semitone (porque podemos)
+
 def merge_consecutive_notes(midi_notes):
     merged_notes = []
     if len(midi_notes) == 0:
@@ -36,11 +43,37 @@ def merge_consecutive_notes(midi_notes):
         if midi_notes[i].pitch == current_note.pitch and midi_notes[i].start_time == current_note.end_time:
             current_note.end_time = midi_notes[i].end_time
         else:
-            merged_notes.append(current_note)
-            current_note = midi_notes[i]
+            notefreq = midi_to_frequency(current_note.pitch)
+
+            if frequency_is_close_to_note(notefreq, midi_notes[i].frequency) and SNAP:
+                current_note.end_time = midi_notes[i].end_time
+            else:
+                merged_notes.append(current_note)
+                current_note = midi_notes[i]
     merged_notes.append(current_note)
     return merged_notes
+
+
+def remove_noise_notes(merged_midi_notes, min_duration):
+    cleaned_notes = []
+    prev_note = None
+
+    for note in merged_midi_notes:
+        if note.end_time - note.start_time > min_duration:
+            # La nota es lo suficientemente larga, la conservamos
+            cleaned_notes.append(note)
+            prev_note = note
+        elif prev_note is not None:
+            # Extender la duración de la nota anterior a la eliminada
+            prev_note.end_time = note.end_time
+
+    return cleaned_notes
+
 
 def frequency_to_midi(frequency):
     midi_note = 69 + 12 * np.log2(frequency / 440.0)
     return round(midi_note)
+
+def midi_to_frequency(midi_note):
+    frequency = 440.0 * (2 ** ((midi_note - 69) / 12.0))
+    return frequency

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def generate_spectrogram(audio_file, output_file):
     # Cargar el archivo de audio
-    audio_data, sample_rate = librosa.load(audio_file)
+    audio_data, sample_rate = librosa.load(audio_file, sr=8000)
     print(audio_data, sample_rate)
 
     # Calcular el espectrograma
@@ -21,6 +21,6 @@ def generate_spectrogram(audio_file, output_file):
 
 
 # Llamar a la función para generar y guardar el espectrograma
-audio_file = "tutu.wav"
+audio_file = "audio.wav"
 output_image_file = "spectrogram.png"
 generate_spectrogram(audio_file, output_image_file)

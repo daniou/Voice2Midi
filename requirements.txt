@@ -3,3 +3,7 @@ librosa==0.9.1
 numpy==1.22.4
 pandas==1.4.4
 tensorflow==2.10.0
+
+MIDIUtil~=1.2.1
+matplotlib~=3.7.2
+soundfile~=0.12.1
