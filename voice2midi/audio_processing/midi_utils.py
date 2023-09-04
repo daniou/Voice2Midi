@@ -3,7 +3,7 @@ import numpy as np
 
 
 SNAP = True
-CLOSE_TO_NOTE_PERCENTAGE = 0.8
+CLOSE_TO_NOTE_PERCENTAGE = 0.99
 
 class MidiNote:
     def __init__(self, frequency, start_time, end_time):
@@ -15,6 +15,7 @@ class MidiNote:
 
     def __str__(self):
         return f"Nota MIDI: {self.pitch}, Tiempo de inicio: {self.start_time}, Tiempo de finalización: {self.end_time}, FREQUENCY: {self.frequency}"
+
 
 def generate_midi_file(midi_notes, output_file):
     midi_file = MIDIFile(1)
