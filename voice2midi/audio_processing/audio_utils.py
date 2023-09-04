@@ -81,14 +81,15 @@ def get_dominant_frequency_lowest_freq2(data, sampling_rate):
     num_samples = len(data)
     frequencies = np.abs(np.fft.fftfreq(num_samples, 1 / sampling_rate))
     # Calcular la suma de intensidades en cada bin de frecuencia
-    intensity_sum = fft_magnitude / num_samples
+    intensity_sum = (fft_magnitude / num_samples) ** 4
+
     # Definir un umbral de intensidad (puedes ajustar este valor según tus necesidades)
-    intensity_threshold = calculate_intensity_threshold(intensity_sum, 0.05)
+    intensity_threshold = calculate_intensity_threshold(intensity_sum, 0.25)
     print("##@#@@#@#@THRESHOLD", intensity_threshold )
 
     peaks = []
     for i in range(len(intensity_sum)):
-        if intensity_sum[i] > intensity_threshold and frequencies[i] > 100:
+        if intensity_sum[i] > intensity_threshold and frequencies[i] > 125:
             peaks.append([intensity_sum[i], frequencies[i]])
 
     if peaks:
@@ -102,8 +103,8 @@ def get_dominant_frequency_lowest_freq2(data, sampling_rate):
 
 def get_dominant_frequency(data, sampling_rate):
 
-    freq1 = get_dominant_frequency_lowest_freq2(data,sampling_rate)
+    freq1 = librosa.yin(data, fmin=100, fmax=2000, sr=sampling_rate)
     #freq2 = get_dominant_frequency_autocorrelation(data,sampling_rate)
     print(f"FREQUENCIES: {freq1}, ")
 
-    return freq1#el autocorrelation se columpia en los inicios, threshold consultado con la universidad de mis cojones 33
+    return np.mean(freq1)#el autocorrelation se columpia en los inicios, threshold consultado con la universidad de mis cojones 33

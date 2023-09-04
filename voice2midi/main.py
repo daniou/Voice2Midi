@@ -19,9 +19,9 @@ def split_audio(file_path, segment_duration, rms_threshold=0.01):
         # Calcular el valor RMS del segmento
         rms_value = np.sqrt(np.mean(segment ** 2))
 
+        dominant_frequencies = get_dominant_frequency(segment, sample_rate * 2)
         if rms_value >= rms_threshold:
-            dominant_frequency = get_dominant_frequency(segment, sample_rate * 2)
-            if dominant_frequency  > 1:
+            if dominant_frequency > 1:
                 midi_note = MidiNote(dominant_frequency, float(start) / sample_rate, float(end) / sample_rate)
                 print(midi_note)
                 midi_notes.append(midi_note)
@@ -38,7 +38,7 @@ def print_freqs(midi_notes):
 
 def main():
     file_path = "../scripts/audio2.wav"
-    sample_period = 1.0 / 20#int(input("Introduce los samples por segundo: "))
+    sample_period = 1.0 / 8#int(input("Introduce los samples por segundo: "))
     midi_notes = split_audio(file_path, sample_period)
     print_freqs(midi_notes)
     merged_midi_notes = merge_consecutive_notes(midi_notes)
